@@ -52,6 +52,7 @@ drop table calisanlar;
 --kendi yorumumuz. Parent table'dan sildiğimiz için child table'dan da silinmiş olur
 --Cascade ile parentteki id'yi child'dan bağımsız olarak silmemize izin veriyor.
 --Fakat child parenttin id'sini aldığı için paraentten silinmiş olsa bile, child'da parentten alınmış olan id hala durur
+CREATE TABLE talebeler
 (
 id CHAR(3) primary key,  
 isim VARCHAR(50),
@@ -59,6 +60,7 @@ veli_isim VARCHAR(50),
 yazili_notu int
 );
 INSERT INTO talebeler VALUES(123, 'Ali Can', 'Hasan',75);
+INSERT INTO talebeler VALUES(129, '', 'Hasan',59);
 INSERT INTO talebeler VALUES(124, 'Merve Gul', 'Ayse',85);
 INSERT INTO talebeler VALUES(125, 'Kemal Yasa', 'Hasan',85);
 INSERT INTO talebeler VALUES(126, 'Nesibe Yılmaz', 'Ayse',95);
@@ -88,13 +90,15 @@ DROP table talebeler CASCADE; -- Parent tabloyu kaldırmak istersek Drop table t
 alter table talebeler 
 alter column isim TYPE VARCHAR(30), 
 alter column isim SET NOT NULL;
+select * from talebeler
 -- Talebeler tablosundaki yazılı_notu sutununa 60 dan büyük rakam girilebilsin
-alter table talebeler 
+alter table talebeler
 ADD CONSTRAINT sinir CHECK (yazili_notu>60);
 --CHECK kısıtlaması ile tablodaki istediğimiz sutunu sınırlandırabiliriz
 -- yukarda 60'i sinir olarak belirledigimiz icin bunu eklemedi
 INSERT INTO talebeler VALUES(128, 'Mustafa Can', 'Hasan',45);
-create table ogrenciler(
+
+create table ogrenciler3(
 id int, 
 isim varchar(45),
 adres varchar(100),
@@ -102,25 +106,31 @@ sinav_notu int
 );
 Create table ogrenci_adres
 AS
-SELECT id, adres from ogrenciler;
-select * from ogrenciler
+SELECT id, adres from ogrenciler3;
+-- var olan ogrenciler3 tablosundan istenilen stunlari secerek ogrenci_adres tablo sunu olusturduk
+select * from ogrenciler3
 select * from ogrenci_adres
+
 --Tablodaki bir sutuna PRIMARY KEY ekleme
-alter table ogrenciler
+alter table ogrenciler3
 ADD PRIMARY KEY (id);
+-- burada ogrenciler3 sutununu pk yaptik
 --PRIMARY KEY oluşturmada 2. yol
-alter table ogrenciler
+alter table ogrenci_adres
 ADD CONSTRAINT pk_id PRIMARY KEY(id);
+select * from ogrenci_adres
 --PK'den sonra FK ataması
 alter table ogrenci_adres
-ADD foreign key (id) REFERENCES ogrenciler; 
+ADD foreign key (id) REFERENCES ogrenciler3; 
 --Child tabloyu parent tablodan oluşturduğumuz için sutun adı verilmedi
 --PK'yi silme CONTRAINT silme
-alter table ogrenciler DROP CONSTRAINT pk_id;
+alter table ogrenciler3 DROP CONSTRAINT pk_id;
 --FK'yi silme CONTRAINT silme
 alter table ogrenci_adres DROP CONSTRAINT ogrenci_adres_id_fkey;
---Yazılı notu 85 den büyyük talebe bilgilerini getirin 
+--Yazılı notu 85 den büyyük talebe bilgilerini getirin
+Select * from talebeler
 Select * from talebeler WHERE yazili_notu>85;
+
 -- ismi Mustafa Bak olan talebenin tüm bilgilerini getirin
 select * from talebeler Where isim='Mustafa Bak'
 -- SELECT komutunda -- BETWEEN Koşulu
@@ -138,6 +148,7 @@ insert into personel values('1003', 'Ayşe Tan', 65000);
 insert into personel values('1004', 'Derya Soylu', 95000);
 insert into personel values('1005', 'Yavuz Bal', 80000);
 insert into personel values('1006', 'Sena Beyaz', 100000);
+select * from personel
 /*
     AND (ve): Belirtilen şartların her ikiside gerçekleşiyorsa o kayıt listelenir
 Bir tanesi gerçekleşmezse listelemez
@@ -148,21 +159,26 @@ Hem sınav1 hemde sınav2 alanı, 50'den büyük olan kayıtları listeler
 Hem sınav1 veya sınav2 alanı, 50 den büyük olan kayıtları listeler    
 */
 select * from personel
---id'si 1003 ile 1005 arasında olan personel bilgisini listeleyiniz
+select * from talebeler where id between '125' and '126';
 select * from personel WHERE id BETWEEN '1003' and '1005';
+
+--id'si 1003 ile 1005 arasında olan personel bilgisini listeleyiniz
+select * from talebeler where yazili_notu between 85 and 95;
 --2. YOL
 select * from personel WHERE id>='1003' and id<='1005';
 -- Maaşı 70000 veya ismi Sena olan personeli listele
 select * from personel where maas=70000 OR isim ='Sena Beyaz'
+
 --IN : Birden fazla mantıksal ifade ile tanımlayabileceğimiz durumları tek komutta yazabilme 
 --imkanı verir
 --Farklı sütunlar için IN kullanılamaz
 --id'si 1001,1002 ve 1004 olan personelin bilgilerini listele
 select * from personel WHERE id ='1001' or id ='1002' or id = '1004';
 -- 2. YOL
+select * from personel WHERE isim IN('Ali Can', 'Ayşe Tan', 'Veli Mert');
 select * from personel WHERE id IN ('1001','1002','1004');
 -- Maaşı sadece 70000, 100000 olan personeli listele
-select * from personel WHERE maas IN (70000,100000);
+select * from personel WHERE maas between '70000' and '100000';
 /*
 SELECT - LIKE koşulu
 LIKE : Sorgulama yaparken belirli (pattern) kalıp ifadeleri kullanabilmemizi sağlar
