@@ -12,6 +12,7 @@ create table personel_adres
 as
 select pers_id, sehir, adres from personel;
 select * from personel
+select * from personel_adres
 -- DML --> Data Manupulation Lang.
 -- INSERT - UPDATE - DELETE
 --Tabloya veri ekleme, tablodan veri güncelleme ve silme işlemlerinde kullanılan komutlar

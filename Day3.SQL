@@ -18,6 +18,7 @@ INSERT INTO calisanlar VALUES('', 'osman', 2000, '2018-04-14');
 --INSERT INTO calisanlar VALUES('', 'osman can', 2000, '2018-04-14'); --PRIMARY KEY
 --INSERT INTO calisanlar VALUES( '10002', 'ayse Yılmaz' ,12000, '2018-04-14'); --PRIMARY KEY
 --INSERT INTO calisanlar VALUES( null, 'filiz ' ,12000, '2018-04-14'); -- PRIMARY KEY
+select * from calisanlar
 -- FOREIGN KEY--
 CREATE TABLE adresler
 (
@@ -27,6 +28,8 @@ cadde varchar(30),
 sehir varchar(20),
 CONSTRAINT fk FOREIGN KEY (adres_id) REFERENCES calisanlar(id)   
 );
+--BIZIM Degerlendirmemiz.Constarint bir kısıtlamadır. adres_id'ye, calisanlar id'sinde bulunmayan başka id giremeyiz.
+--Mesela: calisanlar id 102 e kadar ise adres_id'sine 103 id giremeyiz. Cunku calisanlar id'si 102'e kadar
 INSERT INTO adresler VALUES('10003','Mutlu Sok', '40.Cad.','IST');
 INSERT INTO adresler VALUES('10003','Can Sok', '50.Cad.','Ankara');
 INSERT INTO adresler VALUES('10002','Ağa Sok', '30.Cad.','Antep');
@@ -46,7 +49,9 @@ drop table calisanlar;
 --Her defasında önce child tablodaki verileri silmek yerine 
 --ON DELETE CASCADE silme özelliğini aktif hale getirebiliriz
 --Bunun için FK olan satırın en sonuna ON DELETE CASCADE komutunu yazmamız yeterli
-CREATE TABLE talebeler
+--kendi yorumumuz. Parent table'dan sildiğimiz için child table'dan da silinmiş olur
+--Cascade ile parentteki id'yi child'dan bağımsız olarak silmemize izin veriyor.
+--Fakat child parenttin id'sini aldığı için paraentten silinmiş olsa bile, child'da parentten alınmış olan id hala durur
 (
 id CHAR(3) primary key,  
 isim VARCHAR(50),
@@ -75,7 +80,9 @@ delete from notlar WHERE talebe_id = '123'
 delete from talebeler where id='126' -- ON DELETE CASCADE kullandığımız için PARENT table'dan direk silebildik
 -- Parent table'dan sildiğimiz için child table'dan da silinmiş olur
 Delete from talebeler
-DROP table talebeler CASCADE; -- Parent tabloyu kaldırmak istersek Drop table tablo_adı'ndan sonra 
+DROP table talebeler CASCADE; -- Parent tabloyu kaldırmak istersek Drop table tablo_adı'ndan sonra /*(affetmiyor ucuruyor)
+-- Drop table tablo_ismi CASCADE--> yazarsak child'da 
+--ON DELETE CASCADE Comutu  olmasa bile parent'i siler*/
 --CASCADE komutunu kullanırız
 --Talebeler tablosundaki isim sutununa NOTT NULL kısıtlaması ekleyiniz ve veri tipini VARCHAR(30) olarak değiştiriniz
 alter table talebeler 
