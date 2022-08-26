@@ -47,10 +47,14 @@ SET urun_id = urun_id+1 WHERE urun_id>1004
 --  urunler tablosundaki tüm ürünlerin urun_id değerini ted_vergino sutun değerleri ile toplayarak güncelleyiniz.
 update urunler
 set urun_id=ted_vergino+urun_id ; --butun degerleri istedigimiz icin WHERE koymadik.
---urunler tablosundan Ali Bak’in aldigi urunun ismini, tedarikci tablosunda irtibat_ismi
+--  urunler tablosundan Ali Bak’in aldigi urunun ismini, tedarikci  tablosunda irtibat_ismi 
 -- 'Adam Eve' olan firmanın ismi (firma_ismi) ile degistiriniz.
--- Bu soruda tedarikciler urunler tablosunu yeniden olusturduk.
-update urunler
-set urun_isim = (select firma_ismi from tedarikciler where irtibat_ismi='Adam Eve')
-where musteri_isim = 'Ali Bak';
-
+-- Bu soruda tedarikçiler ve urunler tablosunu yeniden oluşturduk
+UPDATE urunler                  
+SET urun_isim = (SELECT firma_ismi from tedarikciler WHERE irtibat_ismi = 'Adam Eve')                   
+WHERE musteri_isim = 'Ali Bak';                 
+-- Urunler tablosunda laptop satin alan musterilerin ismini, firma_ismi Apple’in irtibat_isim'i ile degistirin.
+UPDATE urunler                  
+SET musteri_isim = (SELECT irtibat_ismi from tedarikciler WHERE firma_ismi = 'Apple')                   
+WHERE urun_isim = 'Laptop'                  
+select * from urunler
