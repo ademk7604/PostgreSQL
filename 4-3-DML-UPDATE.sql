@@ -51,5 +51,6 @@ set urun_id=ted_vergino+urun_id ; --butun degerleri istedigimiz icin WHERE koyma
 -- 'Adam Eve' olan firmanın ismi (firma_ismi) ile degistiriniz.
 -- Bu soruda tedarikciler urunler tablosunu yeniden olusturduk.
 update urunler
-set 
+set urun_isim = (select firma_ismi from tedarikciler where irtibat_ismi='Adam Eve')
+where musteri_isim = 'Ali Bak';
 
