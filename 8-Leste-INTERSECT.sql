@@ -63,7 +63,7 @@ FROM workers
 ORDER BY LENGTH(name) + LENGTH(state);
 
 --2. Yol
-SELECT name || ' ' || state || ' ' || LENGTH(name) + LENGTH(state) AS "Name and States"
+SELECT name || ' ' || state || ' ' || LENGTH(name) + LENGTH(state) AS "Name and States" -- || (pait) birlestirme yapiyor
 FROM workers
 ORDER BY LENGTH(name) + LENGTH(state);
 
